@@ -55,6 +55,12 @@ public class Mandible {
 		}
 	}
 	
+	public void open(){
+		leftMandible.set(-0.5);
+		rightMandible.set(0.5);
+	}
+	
+	
 	public Mandible(){
 	}
 	

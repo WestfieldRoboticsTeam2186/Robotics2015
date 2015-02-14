@@ -33,12 +33,12 @@ public class DriveManager {
 	private double forward = 0d;
 	
 	//PID values
-	private final double kLeftP = 0.001;
-	private final double kLeftI = 0.0005;
+	private final double kLeftP = 0.00005;
+	private final double kLeftI = 0.000005;
 	private final double kLeftD = 0.1;
 	
-	private final double kRightP = 0.001;
-	private final double kRightI = 0.0005;
+	private final double kRightP = 0.00005;
+	private final double kRightI = 0.000005;
 	private final double kRightD = 0.1;
 	
 	private final double kLeftSideP = 0.001;
@@ -61,60 +61,61 @@ public class DriveManager {
 	//Constructor
 	protected DriveManager(){
 		
-		leftController = new PIDSpeedController(left, leftEnc, kLeftP, kLeftI, kLeftD);
-		//rightController = new PIDSpeedController(right, leftEnc, kRightP, kRightI, kRightD);
-		//leftSideController = new PIDSpeedController(fifthWheel, leftSideEnc, kLeftSideP, kLeftSideI, kLeftSideD);
-		//rightSideController = new PIDSpeedController(otherWheel, rightSideEnc, kRightSideP, kRightSideI, kRightSideD);
+		leftController = new PIDSpeedController(kLeftP, kLeftI, kLeftD, leftEnc);
+		rightController = new PIDSpeedController(kRightP, kRightI, kRightD, rightEnc);
+		/*leftSideController = new PIDSpeedController(fifthWheel, leftSideEnc, kLeftSideP, kLeftSideI, kLeftSideD);
+		rightSideController = new PIDSpeedController(otherWheel, rightSideEnc, kRightSideP, kRightSideI, kRightSideD);*/
 		
-		//leftController.enable();
-		//rightController.enable();
-		//leftSideController.enable();
-		//rightSideController.enable();
+		leftController.enable();
+		rightController.enable();
+		/*leftSideController.enable();
+		rightSideController.enable();*/
 		
 		
-		/*leftController.setContinuous(true);
+		leftController.setContinuous(true);
 		rightController.setContinuous(true);
-		leftSideController.setContinuous(true);
+		/*leftSideController.setContinuous(true);
 		rightSideController.setContinuous(true);*/
+		
+		leftController.setOutputRange(-1, 1);
+		rightController.setOutputRange(-1, 1);
+		
+		leftController.setInputRange(-5000, 5000);
+		rightController.setInputRange(-5000, 5000);
 	}
 	
 	//Call this method during Teleop
 	public void update(Joystick j){
 		//Arcade Drive
 		double leftAmt = (-j.getAxis(AxisType.kY)) + j.getAxis(AxisType.kZ);
-		if(leftAmt > 1) leftAmt = 1.0;
-		else if(leftAmt < -1) leftAmt = -1.0;
+		leftAmt = clamp(leftAmt, -1, 1);
 		
-		double rightAmt = (j.getAxis(AxisType.kY)) - j.getAxis(AxisType.kZ);
-		if(rightAmt > 1) rightAmt = 1.0;
-		else if(rightAmt < -1) rightAmt = -1.0;
+		double rightAmt = (j.getAxis(AxisType.kY)) + j.getAxis(AxisType.kZ);
+		rightAmt = clamp(rightAmt, -1, 1);
 		
 		//PID Drive
 		//leftController.setSetpoint((leftAmt+1.0)*2.5);
 		//rightController.setSetpoint((rightAmt+1.0)*2.5);
+		SmartDashboard.putNumber("Left Input", leftAmt*750);
+		SmartDashboard.putNumber("Right Input", rightAmt * 750);
+
+		leftController.setSetPoint(leftAmt*750);
+		left.set(leftController.get());
+		SmartDashboard.putNumber("Left Amount", leftController.get());
 		
-		SmartDashboard.putNumber("Right Encoder", rightEnc.getRaw());
-		SmartDashboard.putNumber("Left Side Encoder", leftSideEnc.getRaw());
-		SmartDashboard.putNumber("Right Side Encoder", rightSideEnc.getRaw());
-		SmartDashboard.putNumber("Amount", 0.0d);
-		double in = SmartDashboard.getNumber("Amount", 0.0d);
-		leftController.set(leftAmt);
-		rightController.set(rightAmt);
-		
+		rightController.setSetPoint(rightAmt * 750);
+		right.set(rightController.get());
+		SmartDashboard.putNumber("Right Amount", rightController.get());
 		
 		//Side Drive
 		double amt = j.getAxis(AxisType.kX);
 		//PID Drive
 		//this.leftSideController.setSetpoint((amt+1.0) * 2.5);
 		//rightSideController.setSetpoint((-amt+1.0) * 2.5);
-		leftSideController.set(amt);
-		rightSideController.set(-amt);
+		/*fifthWheel.set(amt*0.5);
+		otherWheel.set(amt*0.5);*/
 	}
-	
-	public void stopAll(){
-		leftController.disable();
-		rightController.disable();
-		leftSideController.disable();
-		rightSideController.disable();
+	static double clamp(double val, double min, double max){
+		return Math.max(min, Math.min(max, val));
 	}
 }
