@@ -3,6 +3,8 @@ package org.usfirst.frc.team2186.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+
+import org.usfirst.frc.team2186.robot.Mandible.MandibleManager;
 import org.usfirst.frc.team2186.robot.autonomous.AutonomousManager;
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,13 +19,16 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
 	
-	//Managers
-	AutonomousManager autoManager = new AutonomousManager();
-	DriveManager driveTrain = DriveManager.getInstance();
-	
 	//Inputs
 	Joystick j1 = new Joystick(0);
 	Joystick j2 = new Joystick(1);
+	
+	//Managers
+	AutonomousManager autoManager = new AutonomousManager();
+	DriveManager driveTrain = DriveManager.getInstance();
+	MandibleManager mandible = new MandibleManager();
+	
+
 	
 	//Init robot systems
     public void robotInit() {
@@ -42,6 +47,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	driveTrain.update(j1);
+    	mandible.update(j2);
     }
     
     /**
