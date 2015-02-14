@@ -33,20 +33,20 @@ public class DriveManager {
 	private double forward = 0d;
 	
 	//PID values
-	private final double kLeftP = 0.00015;
-	private final double kLeftI = 0;
-	private final double kLeftD = 0;
+	private final double kLeftP = 0.001;
+	private final double kLeftI = 0.0005;
+	private final double kLeftD = 0.1;
 	
-	private final double kRightP = 0.1;
-	private final double kRightI = 0.001;
+	private final double kRightP = 0.001;
+	private final double kRightI = 0.0005;
 	private final double kRightD = 0.1;
 	
-	private final double kLeftSideP = 0.1;
-	private final double kLeftSideI = 0.001;
+	private final double kLeftSideP = 0.001;
+	private final double kLeftSideI = 0.0005;
 	private final double kLeftSideD = 0.1;
 	
-	private final double kRightSideP = 0.1;
-	private final double kRightSideI = 0.001;
+	private final double kRightSideP = 0.001;
+	private final double kRightSideI = 0.0005;
 	private final double kRightSideD = 0.1;
 	//Singleton
 	protected static DriveManager instance = null;
@@ -99,7 +99,7 @@ public class DriveManager {
 		SmartDashboard.putNumber("Amount", 0.0d);
 		double in = SmartDashboard.getNumber("Amount", 0.0d);
 		leftController.set(leftAmt);
-		//rightController.set(rightAmt);
+		rightController.set(rightAmt);
 		
 		
 		//Side Drive
@@ -107,8 +107,8 @@ public class DriveManager {
 		//PID Drive
 		//this.leftSideController.setSetpoint((amt+1.0) * 2.5);
 		//rightSideController.setSetpoint((-amt+1.0) * 2.5);
-		//leftSideController.set(amt);
-		//rightSideController.set(-amt);
+		leftSideController.set(amt);
+		rightSideController.set(-amt);
 	}
 	
 	public void stopAll(){
