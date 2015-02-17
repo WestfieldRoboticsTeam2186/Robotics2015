@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lifter {
 	
@@ -15,22 +16,45 @@ public class Lifter {
 	DigitalInput lifterMin = new DigitalInput(RobotMap.LIMIT_SWITCH_LIFT_MIN);
 	DigitalInput lifterMax = new DigitalInput(RobotMap.LIMIT_SWITCH_LIFT_MAX);
 	
+	double lifterPos = 0.0;
 	
-	public void update(Joystick j){
-		if(j.getRawButton(6)){
-			if(!lifterMax.get()){
-				motor.set(0.5);
-			} else {
-				motor.set(0);
-			}
-
-		} else if(j.getRawButton(8)){
-			if(!lifterMin.get()){
-				motor.set(-0.5);
-			} else {
-				motor.set(0);
+	public void reset(Joystick j){
+		while(lifterMin.get()){
+			motor.set(0.5);
+			if(j.getRawButton(2)){
+				break;
 			}
 		}
+		motor.set(0);
+	}
+	public void update(Joystick j){
+		SmartDashboard.putNumber("Lifter Position", lifterPos);
+		if(j.getRawButton(6)){
+			motor.set(-1);
+			lifterPos += 1;
+		}
+		SmartDashboard.putBoolean("Is at top", !lifterMax.get());
+		/*if(!lifterMax.get()){
+			motor.set(0);
+		}*/
+		
+		if(j.getRawButton(8)){
+			motor.set(0.75);
+			lifterPos -= 0.75;
+		}
+		/*if(j.getRawButton(3)){
+			reset(j);
+		}*/
+		SmartDashboard.putBoolean("Is at bottom", !lifterMin.get());
+		/*if(!lifterMin.get()){
+			motor.set(0);
+		}*/
+
+		if(j.getRawButton(2) || !lifterMin.get() || !lifterMax.get()){
+			motor.set(0);
+		}
+		
+		
 	}
 	
 	public Lifter(){
