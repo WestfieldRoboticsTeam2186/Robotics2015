@@ -10,6 +10,8 @@ public class AutonomousManager {
 	DriveManager drive = DriveManager.getInstance();
 	Timer timer;
 	
+	Pixy pixy;
+	
 	final int NEUTRAL = 0;
 	final int MOVING_FORWARD = 1;
 	final int MOVING_LEFT = 2;
