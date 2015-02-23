@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 	//Managers
 	AutonomousManager autoManager = new AutonomousManager();
 	DriveManager driveTrain = DriveManager.getInstance();
-	MandibleManager mandible = new MandibleManager();
+	MandibleManager mandible;
 
 	
 
@@ -34,6 +34,7 @@ public class Robot extends IterativeRobot {
 	//Init robot systems
     public void robotInit() {
     	//TODO: Add more values to init.
+    	mandible = MandibleManager.getInstance();
     }
 
     /**

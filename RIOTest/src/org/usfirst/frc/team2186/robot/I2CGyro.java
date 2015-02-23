@@ -1,11 +1,7 @@
 package org.usfirst.frc.team2186.robot;
 
-import java.nio.*;
-
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class I2CGyro implements PIDSource {

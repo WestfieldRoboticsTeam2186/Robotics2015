@@ -83,6 +83,10 @@ public class Mandible {
 		rightMandible.set(0.5);
 	}
 	
+	public void setState(int state){
+		this.state = state;
+	}
+	
 	
 	public Mandible(){
 	}

@@ -103,6 +103,22 @@ public class DriveManager {
 		
 	}
 	
+	public void update(double x, double y, double z){
+		gyro.update();
+		gyroController.setSetPoint(z * 100);
+		double zResult = gyroController.get();
+		if(Math.abs(zResult) < 0.1){
+			zResult = 0;
+		}
+		zResult = clamp(zResult, -1, 1);
+		
+		double leftAmt = (-y)+zResult;
+		leftAmt = clamp(leftAmt, -1, 1);
+		
+		double rightAmt = y + zResult;
+		rightAmt = clamp(rightAmt, -1, 1);
+	}
+	
 	//Call this method during Teleop
 	public void update(Joystick j){
 		//Arcade Drive

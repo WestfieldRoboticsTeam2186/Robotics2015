@@ -57,6 +57,20 @@ public class Lifter {
 		
 	}
 	
+	public void update(boolean up, boolean down, boolean stop){
+		if(up){
+			motor.set(-1);
+			lifterPos += 1;
+		}
+		if(down){
+			motor.set(1);
+			lifterPos -= 0.75;
+		}
+		if(stop){
+			motor.set(0);
+		}
+	}
+	
 	public Lifter(){
 		
 	}
