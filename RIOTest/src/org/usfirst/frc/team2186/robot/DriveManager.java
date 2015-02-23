@@ -114,9 +114,32 @@ public class DriveManager {
 		
 		double leftAmt = (-y)+zResult;
 		leftAmt = clamp(leftAmt, -1, 1);
+		if(Math.abs(leftAmt) < 0.1){
+			leftAmt = 0;
+		}
 		
 		double rightAmt = y + zResult;
 		rightAmt = clamp(rightAmt, -1, 1);
+		if(Math.abs(rightAmt) < 0.1){
+			rightAmt = 0;
+		}
+		
+		leftController.setSetPoint(leftAmt * 1000);
+		rightController.setSetPoint(rightAmt * 1000);
+		
+		left.set(leftController.get());
+		right.set(rightController.get());
+		
+		double amt = clamp(x, -1, 1);
+		if(Math.abs(amt)<0.1){
+			amt = 0;
+		}
+		
+		leftSideController.setSetPoint(amt * 750);
+		rightSideController.setSetPoint(amt * 750);
+		
+		fifthWheel.set(leftSideController.get());
+		otherWheel.set(rightSideController.get());
 	}
 	
 	//Call this method during Teleop
