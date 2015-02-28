@@ -24,7 +24,7 @@ public class Robot extends IterativeRobot {
 	Joystick j2 = new Joystick(1);
 	
 	//Managers
-	AutonomousManager autoManager = new AutonomousManager();
+	AutonomousManager autoManager = AutonomousManager.getInstance();
 	DriveManager driveTrain = DriveManager.getInstance();
 	MandibleManager mandible;
 

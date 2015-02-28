@@ -11,6 +11,8 @@ public class AutonomousManager {
 	Timer timer;
 	
 	Pixy pixy;
+	PixyPacket pkt;
+	PixyController c;
 	
 	final int NEUTRAL = 0;
 	final int MOVING_FORWARD = 1;
@@ -26,6 +28,19 @@ public class AutonomousManager {
 	final int LIFTER_DOWN = 2;
 	
 	int lifter_state = LIFTER_NEUTRAL;
+	
+	protected static AutonomousManager instance = null;
+	public static AutonomousManager getInstance(){
+		if(instance == null){
+			instance = new AutonomousManager();
+		}
+		return instance;
+	}
+	
+	protected AutonomousManager(){
+		pixy = new Pixy();
+		c = new PixyController(pixy);
+	}
 	public void driveForward(double secs){
 		this.timer.start();
 		while(!timer.hasPeriodPassed(secs)){
