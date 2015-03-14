@@ -10,7 +10,6 @@ public class Pixy extends Thread{
 	private byte[] b1;
 	private int state = 0;
 	private byte holder;
-	private boolean flag;
 	private int queueIn;
 	private int queueOut;
 	private PixyPacket[] queue;
@@ -22,7 +21,6 @@ public class Pixy extends Thread{
 		pixy.setReadBufferSize(1);
 		pkt = new PixyPacket();
 		b1 = new byte[1];
-		flag = false;
 		queueIn = queueOut = 0;
 		queue = new PixyPacket[QUEUE_SIZE];
 //		start();
@@ -37,7 +35,6 @@ public class Pixy extends Thread{
 		pixy.reset();
 	}
 	public void setFlag(boolean value){
-		flag = value;
 	}
 
 	public void run() {
@@ -45,7 +42,6 @@ public class Pixy extends Thread{
 		int Checksum = 0;
 		int index = 0;
 		int Sig = 0;
-		int packetCounter = 0;
 		while (!interrupted()) {
 			try {
 				b1 = pixy.read(1);

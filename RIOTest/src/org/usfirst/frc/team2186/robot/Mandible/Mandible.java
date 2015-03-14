@@ -2,10 +2,7 @@ package org.usfirst.frc.team2186.robot.Mandible;
 
 import org.usfirst.frc.team2186.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
@@ -18,11 +15,7 @@ public class Mandible {
 	SpeedController leftMandibleMotor = new Victor(RobotMap.MOTOR_MANDIBLE_MOTOR_LEFT);
 	SpeedController rightMandibleMotor = new Victor(RobotMap.MOTOR_MANDIBLE_MOTOR_RIGHT);
 	
-	DigitalInput leftMandibleMin = new DigitalInput(RobotMap.LIMIT_SWITCH_LEFT_MIN);
-	DigitalInput leftMandibleMax = new DigitalInput(RobotMap.LIMIT_SWITCH_LEFT_MAX);
 	
-	DigitalInput rightMandibleMin = new DigitalInput(RobotMap.LIMIT_SWITCH_RIGHT_MIN);
-	DigitalInput rightMandibleMax = new DigitalInput(RobotMap.LIMIT_SWITCH_RIGHT_MAX);
 	
 	final int NOT_GRABBING = 0;
 	final int GRABBING = 1;

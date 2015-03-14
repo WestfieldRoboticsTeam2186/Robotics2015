@@ -24,9 +24,11 @@ public class Robot extends IterativeRobot {
 	Joystick j2 = new Joystick(1);
 	
 	//Managers
+	IO io;
 	AutonomousManager autoManager = AutonomousManager.getInstance();
 	DriveManager driveTrain = DriveManager.getInstance();
 	MandibleManager mandible;
+
 
 	
 
@@ -35,13 +37,18 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
     	//TODO: Add more values to init.
     	mandible = MandibleManager.getInstance();
+    	io = IO.getInstance();
     }
 
     /**
      * This function is called periodically during autonomous
      */
+    public void autonomousInit(){
+    	io.writeInit();
+    }
+    
     public void autonomousPeriodic() {
-    	
+    	autoManager.update();
     }
 
     /**

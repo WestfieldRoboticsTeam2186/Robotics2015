@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class I2CGyro implements PIDSource {
-	I2C i2c = new I2C(I2C.Port.kOnboard, 105);
+	I2C i2c = new I2C(I2C.Port.kOnboard, 0x69);
 	
 	int x;
 
@@ -35,18 +35,6 @@ public class I2CGyro implements PIDSource {
 		SmartDashboard.putNumber("Gyro Z", zavg[3]);
 	}
 	
-	private void average(){
-	
-		zavg[i] = z;
-		i++;
-		if(i >= 3){
-			for(int j = 0; j < i; j++){
-				zavg[i] += zavg[j];
-			}
-			zavg[i] /=i;
-			i = 0;
-		}
-	}
 	private void recvData(){
 		byte[] xbufferl = new byte[1];
 		byte[] xbufferh = new byte[1];

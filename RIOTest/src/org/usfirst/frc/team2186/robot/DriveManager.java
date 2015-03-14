@@ -3,7 +3,6 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -28,12 +27,6 @@ public class DriveManager {
 	@Deprecated
 	RobotDrive drive = new RobotDrive(left, right);
 	
-	
-	//Values from the RobotDrive
-	@Deprecated
-	private double twist = 0d;
-	@Deprecated
-	private double forward = 0d;
 	
 	//PID values
 	private final double kLeftP = 0.00005;
@@ -167,11 +160,11 @@ public class DriveManager {
 		SmartDashboard.putNumber("Left Input", leftAmt*1000);
 		SmartDashboard.putNumber("Right Input", rightAmt * 1000);
 
-		leftController.setSetPoint(leftAmt*1000);
+		leftController.setSetPoint(leftAmt*1250);
 		left.set(leftController.get());
 		SmartDashboard.putNumber("Left Amount", leftController.get());
 		
-		rightController.setSetPoint(rightAmt * 1000);
+		rightController.setSetPoint(rightAmt * 1250);
 		right.set(rightController.get());
 		SmartDashboard.putNumber("Right Amount", rightController.get());
 		
@@ -182,8 +175,8 @@ public class DriveManager {
 		}
 		amt = clamp(amt, -1, 1);
 		//PID Drive
-		leftSideController.setSetPoint(amt * 750);
-		rightSideController.setSetPoint(amt * 750);
+		leftSideController.setSetPoint(amt * 1000);
+		rightSideController.setSetPoint(amt * 1000);
 		SmartDashboard.putNumber("Left Side", amt);
 		fifthWheel.set(leftSideController.get());
 		otherWheel.set(rightSideController.get());

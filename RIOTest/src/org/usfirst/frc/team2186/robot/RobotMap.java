@@ -27,8 +27,5 @@ public class RobotMap {
 	
 	public static final int LIMIT_SWITCH_LIFT_MIN = 8;
 	public static final int LIMIT_SWITCH_LIFT_MAX = 9;
-	public static final int LIMIT_SWITCH_LEFT_MIN = 10;
-	public static final int LIMIT_SWITCH_LEFT_MAX = 11;
-	public static final int LIMIT_SWITCH_RIGHT_MIN = 12;
-	public static final int LIMIT_SWITCH_RIGHT_MAX = 13;
+	public static final int LIMIT_SWITCH_LIFTER = 10;
 }
