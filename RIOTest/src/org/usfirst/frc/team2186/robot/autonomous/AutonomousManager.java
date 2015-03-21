@@ -51,27 +51,22 @@ public class AutonomousManager {
 	}
 	
 	public void update(){
-		try {
-			PixyPacket pkt = io.getPacket();
-			if(pkt.Distance >0.25){
-				movement_state = MOVING_FORWARD;
-			}
-			if(pkt.X < 120){
-				movement_state = MOVING_LEFT;
-			}
-			if(pkt.X > 200){
-				movement_state = MOVING_RIGHT;
-			}
-			
-			if(pkt.Distance < 0.25){
-				movement_state = NEUTRAL;
-				lifter_state = LIFTER_UP;
-			}
-			io.write("ready");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		PixyPacket pkt = io.getPacket();
+		if(pkt.Distance >0.25){
+			movement_state = MOVING_FORWARD;
 		}
+		if(pkt.X < 120){
+			movement_state = MOVING_LEFT;
+		}
+		if(pkt.X > 200){
+			movement_state = MOVING_RIGHT;
+		}
+		
+		if(pkt.Distance < 0.25){
+			movement_state = NEUTRAL;
+			lifter_state = LIFTER_UP;
+		}
+		io.writeInit();
 		switch(movement_state){
 		case NEUTRAL:
 		{
