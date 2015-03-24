@@ -1,11 +1,8 @@
 package org.usfirst.frc.team2186.robot;
 
-import java.io.IOException;
-
 import org.usfirst.frc.team2186.robot.autonomous.PixyPacket;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IO {

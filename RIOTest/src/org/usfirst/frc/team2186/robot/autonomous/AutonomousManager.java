@@ -49,6 +49,15 @@ public class AutonomousManager {
 			drive.update(0, 0.5, 0);
 		}
 	}
+	static final double TICKS_PER_REV = 1440;
+	static final double INCHES_PER_REVOLUTION = 3 * 2 * Math.PI;
+	
+	public void planBUpdate(){
+		switch(this.movement_state){
+		case NEUTRAL:
+			
+		}
+	}
 	
 	public void update(){
 		PixyPacket pkt = io.getPacket();
