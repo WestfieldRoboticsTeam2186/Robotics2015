@@ -50,6 +50,18 @@ public class AutonomousManager {
 		}
 	}
 	
+	public void leftAutonomousUpdate(){
+		
+	}
+	
+	public void midAutonomousUpdate(){
+		
+	}
+	
+	public void rightAutonomousUpdate(){
+		
+	}
+	
 	public void update(){
 		PixyPacket pkt = io.getPacket();
 		if(pkt.Distance >0.25){

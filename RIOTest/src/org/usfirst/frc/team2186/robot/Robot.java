@@ -1,8 +1,12 @@
 
 package org.usfirst.frc.team2186.robot;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2186.robot.Mandible.MandibleManager;
 import org.usfirst.frc.team2186.robot.autonomous.AutonomousManager;
@@ -28,7 +32,9 @@ public class Robot extends IterativeRobot {
 	AutonomousManager autoManager = AutonomousManager.getInstance();
 	DriveManager driveTrain = DriveManager.getInstance();
 	MandibleManager mandible;
-
+	
+	Class autonomous = autoManager.getClass();
+	Method method;
 
 	
 
@@ -38,6 +44,33 @@ public class Robot extends IterativeRobot {
     	//TODO: Add more values to init.
     	mandible = MandibleManager.getInstance();
     	io = IO.getInstance();
+    	boolean button1Checked = SmartDashboard.getBoolean("DB/Button1");
+    	boolean button2Checked = SmartDashboard.getBoolean("DB/Button2");
+    	boolean button3Checked = SmartDashboard.getBoolean("DB/Button3");
+    	
+    	if(button1Checked){
+    		try {
+				method = autonomous.getMethod("leftAutonomousUpdate", null);
+			} catch (NoSuchMethodException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	} else if(button2Checked){
+    		try {
+				method = autonomous.getMethod("midAutonomousUpdate", null);
+			} catch (NoSuchMethodException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		
+    	} else if(button3Checked){
+    		try {
+				method = autonomous.getMethod("rightAutonomousUpdate", null);
+			} catch (NoSuchMethodException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 
     /**
@@ -48,7 +81,13 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousPeriodic() {
-    	autoManager.update();
+    	try {
+			Object ret = method.invoke(null, null);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
