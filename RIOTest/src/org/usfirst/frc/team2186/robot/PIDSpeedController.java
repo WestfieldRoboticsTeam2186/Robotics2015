@@ -21,7 +21,9 @@ public class PIDSpeedController {
 		m_I = kI;
 		m_Encoder = enc;
 	}
-	
+	public double getRaw(){
+		return m_Encoder.getRaw();
+	}
 	private void calculate(){
 		if(m_enabled){
 			m_input = m_Encoder.getRate();

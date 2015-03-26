@@ -58,6 +58,14 @@ public class DriveManager {
 		return instance;
 	}
 	
+	public double getRaw(){
+		return leftController.getRaw();
+	}
+	
+	public double getSideRaw(){
+		return leftSideController.getRaw();
+	}
+	
 	//Constructor
 	protected DriveManager(){
 		
@@ -148,10 +156,10 @@ public class DriveManager {
 		
 		result = clamp(result, -1, 1);
 		
-		double leftAmt = (-j.getAxis(AxisType.kY)) + result;
+		double leftAmt = (-j.getAxis(AxisType.kY)) + zAxis;
 		leftAmt = clamp(leftAmt, -1, 1);
 		
-		double rightAmt = (j.getAxis(AxisType.kY)) + result;
+		double rightAmt = (j.getAxis(AxisType.kY)) + zAxis;
 		rightAmt = clamp(rightAmt, -1, 1);
 		
 		//PID Drive
@@ -160,11 +168,11 @@ public class DriveManager {
 		SmartDashboard.putNumber("Left Input", leftAmt*1000);
 		SmartDashboard.putNumber("Right Input", rightAmt * 1000);
 
-		leftController.setSetPoint(leftAmt*1250);
+		leftController.setSetPoint(leftAmt*1000);
 		left.set(leftController.get());
 		SmartDashboard.putNumber("Left Amount", leftController.get());
 		
-		rightController.setSetPoint(rightAmt * 1250);
+		rightController.setSetPoint(rightAmt * 1000);
 		right.set(rightController.get());
 		SmartDashboard.putNumber("Right Amount", rightController.get());
 		
@@ -175,12 +183,20 @@ public class DriveManager {
 		}
 		amt = clamp(amt, -1, 1);
 		//PID Drive
-		leftSideController.setSetPoint(amt * 1000);
-		rightSideController.setSetPoint(amt * 1000);
+		leftSideController.setSetPoint(amt * 750);
+		rightSideController.setSetPoint(amt * 750);
 		SmartDashboard.putNumber("Left Side", amt);
 		fifthWheel.set(leftSideController.get());
 		otherWheel.set(rightSideController.get());
 		
+	}
+	
+	public void nopidupdate(Joystick j){
+		double x = (-j.getAxis(AxisType.kY)) + j.getAxis(AxisType.kZ);
+		double y = j.getAxis(AxisType.kY)+j.getAxis(AxisType.kZ);
+		
+		left.set(x);
+		right.set(y);
 	}
 	static double clamp(double val, double min, double max){
 		return Math.max(min, Math.min(max, val));

@@ -1,9 +1,8 @@
 package org.usfirst.frc.team2186.robot.autonomous;
 
-import java.io.IOException;
-
 import org.usfirst.frc.team2186.robot.DriveManager;
 import org.usfirst.frc.team2186.robot.IO;
+import org.usfirst.frc.team2186.robot.RobotStates;
 import org.usfirst.frc.team2186.robot.Mandible.MandibleManager;
 
 import edu.wpi.first.wpilibj.*;
@@ -17,20 +16,7 @@ public class AutonomousManager {
 	
 	IO io = IO.getInstance();
 	
-	final int NEUTRAL = 0;
-	final int MOVING_FORWARD = 1;
-	final int MOVING_LEFT = 2;
-	final int MOVING_BACK = 3;
-	final int MOVING_RIGHT = 4;
-	final int STOPPING = 5;
-	
-	int movement_state = NEUTRAL;
-	
-	final int LIFTER_NEUTRAL = 0;
-	final int LIFTER_UP = 1;
-	final int LIFTER_DOWN = 2;
-	
-	int lifter_state = LIFTER_NEUTRAL;
+	RobotStates state = RobotStates.DRIVE_NEUTRAL;
 	
 	protected static AutonomousManager instance = null;
 	public static AutonomousManager getInstance(){
@@ -49,74 +35,159 @@ public class AutonomousManager {
 			drive.update(0, 0.5, 0);
 		}
 	}
+	int numNeutral = 0;
 	
+	private final double TICKS_PER_REV = 1440;
+	private final double INCHES_PER_REV = 3*2*Math.PI;
+	private final double DRIVE_WHEEL_TEETH = 22;
+	private final double WHEEL_FRONT_GEAR_TEETH = 28;
+	private final double WHEEL_SIDE_GEAR_TEETH = 36;
 	public void leftAutonomousUpdate(){
-		
+		switch(state){
+		case DRIVE_NEUTRAL:
+			if(numNeutral == 0){
+				state = RobotStates.DRIVE_FORWARD;
+				numNeutral++;
+			}
+			if(numNeutral == 1){
+				state = RobotStates.DRIVE_BACKWARD;
+				numNeutral++;
+			}
+			if(numNeutral == 2){
+				state = RobotStates.DRIVE_LEFT;
+				numNeutral++;
+			}
+			if(numNeutral == 3){
+				state = RobotStates.DRIVE_FORWARD;
+			}
+			drive.update(0, 0, 0);
+			break;
+		case DRIVE_FORWARD:
+			double inches = drive.getRaw() / TICKS_PER_REV / DRIVE_WHEEL_TEETH * WHEEL_FRONT_GEAR_TEETH * INCHES_PER_REV;
+			if(inches > 115){
+				state = RobotStates.DRIVE_NEUTRAL;
+			} drive.update(0, 1, 0);
+			break;
+		case DRIVE_BACKWARD:
+			double backInches = drive.getRaw() / TICKS_PER_REV / DRIVE_WHEEL_TEETH * WHEEL_FRONT_GEAR_TEETH * INCHES_PER_REV;
+			if(-backInches > 115){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			drive.update(0, -1, 0);
+			break;
+		case DRIVE_LEFT:
+			double leftInches = drive.getSideRaw() / TICKS_PER_REV / DRIVE_WHEEL_TEETH * WHEEL_SIDE_GEAR_TEETH * INCHES_PER_REV;
+			if(leftInches < -27){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			drive.update(-0.5, 0, 0);
+			break;
+		}
 	}
 	
 	public void midAutonomousUpdate(){
-		
+		double inches = drive.getRaw() / TICKS_PER_REV / DRIVE_WHEEL_TEETH * WHEEL_FRONT_GEAR_TEETH * INCHES_PER_REV;
+
+		switch(state){
+		case DRIVE_NEUTRAL:
+			if(numNeutral == 0){
+				state = RobotStates.DRIVE_FORWARD;
+				numNeutral++;
+			}
+			if(numNeutral == 1){
+				mandible.getLifter().setState(RobotStates.LIFTER_UP);
+				state = RobotStates.DRIVE_LEFT;
+				numNeutral++;
+			}
+			if(numNeutral == 2){
+				state = RobotStates.DRIVE_FORWARD;
+				numNeutral++;
+			}
+			if(numNeutral >= 3){
+				drive.update(0, 0, 0);
+			}
+			drive.update(0, 0, 0);
+			break;
+		case DRIVE_FORWARD:
+			if(inches > 40 && numNeutral !=2){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			else if(numNeutral ==  2){
+				if(inches > 56){
+					state = RobotStates.DRIVE_NEUTRAL;
+					numNeutral++;
+				}
+			}
+			drive.update(0, 0.5, 0);
+			break;
+		case DRIVE_BACKWARD:
+			if(-inches > 5){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			drive.update(0, -0.25, 0);
+			break;
+		case DRIVE_LEFT:
+			double sideInches = drive.getSideRaw() / TICKS_PER_REV / DRIVE_WHEEL_TEETH * WHEEL_SIDE_GEAR_TEETH * INCHES_PER_REV;
+			if(-sideInches > 36){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			drive.update(-0.5, 0, 0);
+			break;
+		}
 	}
 	
 	public void rightAutonomousUpdate(){
-		
+		double inches = drive.getRaw() / TICKS_PER_REV / DRIVE_WHEEL_TEETH * WHEEL_FRONT_GEAR_TEETH * INCHES_PER_REV;
+
+		switch(state){
+		case DRIVE_NEUTRAL:
+			if(numNeutral == 0){
+				state = RobotStates.DRIVE_FORWARD;
+				numNeutral++;
+			}
+			if(numNeutral == 1){
+				mandible.getLifter().setState(RobotStates.LIFTER_UP);
+				state = RobotStates.DRIVE_LEFT;
+				numNeutral++;
+			}
+			if(numNeutral == 2){
+				state = RobotStates.DRIVE_FORWARD;
+				numNeutral++;
+			}
+			if(numNeutral >= 3){
+				drive.update(0, 0, 0);
+			}
+			drive.update(0, 0, 0);
+			break;
+		case DRIVE_FORWARD:
+			if(inches > 40 && numNeutral !=2){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			else if(numNeutral ==  2){
+				if(inches > 56){
+					state = RobotStates.DRIVE_NEUTRAL;
+					numNeutral++;
+				}
+			}
+			drive.update(0, 0.5, 0);
+			break;
+		case DRIVE_BACKWARD:
+			if(-inches > 5){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			drive.update(0, -0.25, 0);
+			break;
+		case DRIVE_LEFT:
+			double sideInches = drive.getSideRaw() / TICKS_PER_REV / DRIVE_WHEEL_TEETH * WHEEL_SIDE_GEAR_TEETH * INCHES_PER_REV;
+			if(-sideInches > 72){
+				state = RobotStates.DRIVE_NEUTRAL;
+			}
+			drive.update(-0.5, 0, 0);
+			break;
+		}
 	}
 	
 	public void update(){
-		PixyPacket pkt = io.getPacket();
-		if(pkt.Distance >0.25){
-			movement_state = MOVING_FORWARD;
-		}
-		if(pkt.X < 120){
-			movement_state = MOVING_LEFT;
-		}
-		if(pkt.X > 200){
-			movement_state = MOVING_RIGHT;
-		}
 		
-		if(pkt.Distance < 0.25){
-			movement_state = NEUTRAL;
-			lifter_state = LIFTER_UP;
-		}
-		io.writeInit();
-		switch(movement_state){
-		case NEUTRAL:
-		{
-			drive.update(0, 0, 0);
-			break;
-		}
-		case MOVING_FORWARD:
-		{
-			drive.update(0, 1, 0);
-			break;
-		}
-		case MOVING_LEFT:
-		{
-			drive.update(-1, 0, 0);
-			break;
-		}
-		case MOVING_BACK:
-		{
-			drive.update(0, -1, 0);
-		}
-		}
-		
-		switch(lifter_state){
-		case LIFTER_NEUTRAL:
-		{
-			mandible.getLifter().update(false, false, true);
-			break;
-		}
-		case LIFTER_UP:
-		{
-			mandible.getLifter().update(true, false, false);
-			break;
-		}
-		case LIFTER_DOWN:
-		{
-			mandible.getLifter().update(false, true, false);
-			break;
-		}
-		}
 	}
 }

@@ -22,6 +22,19 @@ public class Mandible {
 	
 	int state = NOT_GRABBING;
 	boolean wheelsAreEnabled = false;
+	
+	public void update(){
+		switch(state){
+		case GRABBING:
+			leftMandible.set(0.15);
+			rightMandible.set(-0.15);
+			break;
+		case NOT_GRABBING:
+			leftMandible.set(0);
+			rightMandible.set(0);
+			break;
+		}
+	}
 	public void update(Joystick j){
 		double xJ = j.getRawAxis(0);
 		SmartDashboard.putNumber("Xbox 1", xJ);
