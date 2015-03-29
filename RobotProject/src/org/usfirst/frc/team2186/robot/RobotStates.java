@@ -1,0 +1,14 @@
+package org.usfirst.frc.team2186.robot;
+
+public enum RobotStates {
+	DRIVE_NEUTRAL,
+	DRIVE_FORWARD,
+	DRIVE_BACKWARD,
+	DRIVE_LEFT,
+	DRIVE_RIGHT,
+	LIFTER_NEUTRAL,
+	LIFTER_UP,
+	LIFTER_DOWN,
+	MANDIBLE_RUNNING,
+	MANDIBLE_STOPPED;
+}
