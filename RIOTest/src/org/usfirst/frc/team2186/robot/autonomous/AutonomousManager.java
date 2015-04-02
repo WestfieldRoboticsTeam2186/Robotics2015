@@ -35,7 +35,19 @@ public class AutonomousManager {
 			drive.update(0, 0.5, 0);
 		}
 	}
+<<<<<<< HEAD
 	int numNeutral = 0;
+=======
+	static final double TICKS_PER_REV = 1440;
+	static final double INCHES_PER_REVOLUTION = 3 * 2 * Math.PI;
+	
+	public void planBUpdate(){
+		switch(this.movement_state){
+		case NEUTRAL:
+			
+		}
+	}
+>>>>>>> 7763dee0c1f8f4b9212ff32f7c76243dac678421
 	
 	private final double TICKS_PER_REV = 1440;
 	private final double INCHES_PER_REV = 3*2*Math.PI;
