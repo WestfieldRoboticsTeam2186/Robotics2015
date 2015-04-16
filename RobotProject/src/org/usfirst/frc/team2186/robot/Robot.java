@@ -1,7 +1,6 @@
 
 package org.usfirst.frc.team2186.robot;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -11,6 +10,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2186.robot.Mandible.MandibleManager;
+import org.usfirst.frc.team2186.robot.autonomous.AutoScript;
 import org.usfirst.frc.team2186.robot.autonomous.AutonomousManager;
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,15 +35,17 @@ public class Robot extends IterativeRobot {
 	DriveManager driveTrain = DriveManager.getInstance();
 	MandibleManager mandible;
 	
+	AutoScript auto = new AutoScript("Autonomous.as");
+	
 	int autoState = 0;
 	
 	//Init robot systems
-    @SuppressWarnings("unused")
-	public void robotInit() {
+    public void robotInit() {
     	//TODO: Add more values to init.
     	mandible = MandibleManager.getInstance();
     	io = IO.getInstance();
     	SmartDashboard.putNumber("Robot Autonomous State: ", autoState);
+    	auto.interpret();
     }
 
     /**
@@ -59,17 +61,7 @@ public class Robot extends IterativeRobot {
     Timer timer = new Timer();
     boolean passed = false;
     public void autonomousPeriodic() {
-    	
-    	if(!timer.hasPeriodPassed(8) && passed != true){
-    		driveTrain.update(0, 0.5, 0);               
-    	} else {
-    		driveTrain.update(0, 0, 0);
-    		passed = true;
-    	}
-    	
-    	if(!DriverStation.getInstance().isAutonomous()){
-    		
-    	}
+    	auto.execute();
     }
     
     @Override
@@ -116,7 +108,7 @@ public class Robot extends IterativeRobot {
     
     @Override
     public void disabledPeriodic(){
-    	passed = false;
+    	driveTrain.passed = false;
     }
     
 }

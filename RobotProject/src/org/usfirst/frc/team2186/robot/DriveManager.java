@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveManager {
@@ -157,6 +158,22 @@ public class DriveManager {
 		SmartDashboard.putNumber("Left Side", amt);
 		fifthWheel.set(amt);
 		otherWheel.set(amt);
+		
+	}
+	boolean passed = false;
+	Timer timer;
+	public void driveForward(double sec, boolean reset){
+		if(reset){
+			passed = false;
+			timer.reset();
+		} else {}
+		timer.start();
+		if(!timer.hasPeriodPassed(sec) && passed != true){
+			this.update(0, 0.5, 0);
+		} else {
+			this.update(0, 0, 0);
+		}
+		timer.stop();
 		
 	}
 	
